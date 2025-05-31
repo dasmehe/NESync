@@ -21,34 +21,4 @@ window.start = async function () {
   }
 }
 
-/*const { invoke } = window.__TAURI__.core;
-
-window.start = async function () {
-   console.log("Starting the Python script...");
-
-  // spawn Python process running your script
-  const command = Command.create('python', ['backend/input.py']);
-  const child = await command.spawn();
-
-  child.stdout.on('data', line => {
-    console.log(`stdout: ${line}`);
-  });
-
-  child.stderr.on('data', line => {
-    console.error(`stderr: ${line}`);
-  });
-
-  await child.stdin.write("0.01\n");
-}
-
-
-window.stop = async function () {
-  child.kill("SIGINT")
-    .then(() => {
-      console.log("Command stopped successfully");
-    })
-    .catch(err => {
-      console.error("Error stopping command:", err);
-    });
-}*/
 
