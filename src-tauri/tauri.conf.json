@@ -13,7 +13,7 @@
     "withGlobalTauri": true,
     "windows": [
       {
-        "title": "nes",
+        "title": "nesync",
         "width": 800,
         "height": 600
       }

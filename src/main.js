@@ -21,7 +21,7 @@ window.start = async function () {
     console.log('WebSocket connection closed');
   }
 }
-window.stop() = async function () {
+window.stop = async function () {
   fetch('http://localhost:8000/stop', {
     method: 'POST'
   })
