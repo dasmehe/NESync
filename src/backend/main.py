@@ -1,56 +1,67 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-import hid
-import time
-import asyncio
-from threading import Thread, Event, Lock
 from fastapi.middleware.cors import CORSMiddleware
+import pyautogui as pag
+import hid
+import asyncio
+import time
+from threading import Thread, Event, Lock
 
 app = FastAPI()
 
-# Allow CORS from all origins (adjust as needed)
+# Allow all CORS (adjust in prod)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Change to your frontend URL in production
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-vid = 0x0810
-pid = 0xE501
+# Global config dict
+config = {
+    "a": "a",
+    "b": "b",
+    "select": "shift",
+    "start": "enter",
+    "up": "up",
+    "down": "down",
+    "left": "left",
+    "right": "right",
+}
 
-device = None
-stop_event = Event()
 wait_time = 0.01
 wait_lock = Lock()
+
+vid = 0x0810
+pid = 0xE501
+device = None
+stop_event = Event()
 
 class ConnectionManager:
     def __init__(self):
         self.active_connections: list[WebSocket] = []
-    
+
     async def connect(self, websocket: WebSocket):
         await websocket.accept()
         self.active_connections.append(websocket)
-    
+
     def disconnect(self, websocket: WebSocket):
         self.active_connections.remove(websocket)
-    
+
     async def broadcast(self, message: str):
-        to_remove = []
-        for connection in self.active_connections:
+        for conn in list(self.active_connections):
             try:
-                await connection.send_text(message)
+                await conn.send_text(message)
             except Exception:
-                # Client probably disconnected, mark to remove
-                to_remove.append(connection)
-        for conn in to_remove:
-            self.active_connections.remove(conn)
+                self.disconnect(conn)
 
 manager = ConnectionManager()
 
-@app.get("/")
-async def root():
-    return {"message": "Hello, your FastAPI app is live!"}
+def handle_input(buttons):
+    for button in buttons:
+        key = config.get(button)
+        if key:
+            pag.press(key)
 
 def parse(data):
     buttons = []
@@ -79,26 +90,30 @@ def controller_loop(loop):
         device = hid.device()
         device.open(vid, pid)
         device.set_nonblocking(True)
-        print("Listening to NES controller input...")
+        print("Listening to NES controller...")
 
         while not stop_event.is_set():
             data = device.read(64)
             if data:
                 buttons = parse(data)
-                # Schedule broadcast on the main event loop safely
-                asyncio.run_coroutine_threadsafe(manager.broadcast(str(buttons)), loop)
+                if buttons:
+                    handle_input(buttons)
+                    asyncio.run_coroutine_threadsafe(manager.broadcast(str(buttons)), loop)
             with wait_lock:
-                sleep_time = wait_time
-            time.sleep(sleep_time)
+                sleep = wait_time
+            time.sleep(sleep)
     except Exception as e:
-        print(f"Error in controller loop: {e}")
+        print("Controller error:", e)
     finally:
         if device:
             device.close()
-        print("Controller loop stopped")
 
 thread = None
-loop = asyncio.get_event_loop()  # Get the main asyncio event loop here
+loop = asyncio.get_event_loop()
+
+@app.get("/")
+async def root():
+    return {"message": "FastAPI NES controller ready"}
 
 @app.websocket("/ws/buttons")
 async def websocket_endpoint(websocket: WebSocket):
@@ -119,7 +134,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
 @app.post("/start")
 async def start_controller():
-    global thread, stop_event, loop
+    global thread
     if thread and thread.is_alive():
         return {"status": "already running"}
     stop_event.clear()
@@ -131,3 +146,10 @@ async def start_controller():
 async def stop_controller():
     stop_event.set()
     return {"status": "stopping"}
+
+@app.post("/config")
+async def receive_config(data: dict):
+    global config
+    config.update(data)
+    print("Updated config:", config)
+    return {"status": "success", "data": config}
