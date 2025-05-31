@@ -1,112 +1,92 @@
-style
-{
-  font-family: 'sans-sherif', cursive;
-  color: white;
+body {
+  margin: 0;
+  font-family: 'sans-serif', cursive;
   font-size: 16px;
+  color: white;
   background-color: rgb(34, 34, 46);
 }
 
-
-.inputs
-{
-  position: fixed;         /* Stay in place */
-  top: 65%;                /* Distance from the top */
-  left: 50%;               /* Go to the horizontal center */
-  transform: translate(-50%, -50%); /* Shift left and up by half the image width and height */
-  width: 300px;            /* Set a fixed width */
-  height: 40px;            /* Set a fixed height */
-  background-color: rgba(63, 51, 78, 0.384); /* Red background for the input field */
-  color: white;            /* Set text color to white */
-  border: none;            /* Remove border */
-  border-radius: 10px;      /* Rounded corners */
-  padding: 10px;           /* Add some padding */
-}
-.input
-{
-  align-items: horizontal; /* Align items horizontally */
-}
-.buttons
-{
-  position: fixed;         /* Stay in place */
-  top: 50%;                /* Distance from the top */
-  left: 50%;               /* Go to the horizontal center */
-  transform: translate(-50%, -50%); /* Shift left and up by half the image width and height */
-  display: flex;           /* Use flexbox for layout */
-  flex-direction: horizontal;  /* Stack buttons vertically */
-  gap: 30px;               /* Space between buttons */
-}
-.start
-{
-  width: 200px;            /* Set a fixed width */
-  height: 50px;            /* Set a fixed height */
-  background-color: rgba(63, 51, 78, 0.384); /* Red background for the start button */
-  color: white;            /* Set text color to white */
-  border: none;            /* Remove border */
-  border-radius: 10px;      /* Rounded corners */
-  cursor: pointer;         /* Pointer cursor on hover */
-  font-size: 20px;         /* Set a larger font size */
-}
-.title
-{
-  position: fixed;         /* Stay in place */
-  top:17%;               /* Distance from the top */
-  left: 50%;               /* Go to the horizontal center */
-  transform: translateX(-50%);  /* Shift left by half the image width */
-  font-size: 36px;         /* Set a larger font size */
-  color: white;            /* Set text color to white */
-}
-.NES_Controller
-{
-  position: fixed;         /* Stay in place */
-  top: 20px;               /* Distance from the top */
-  left: 50%;               /* Go to the horizontal center */
-  transform: translateX(-50%);  /* Shift left by half the image width */
-  width: 350px;          /* Set a fixed width */
-  height: auto;            /* Keep aspect ratio */
-}
-.background
-{
+.background {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   background-color: rgb(34, 34, 46);
-  z-index: 1000;
+  z-index: -1;
 }
-.inputs-container {
-  position: fixed;
-  top: 65%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 350px; /* a bit wider for labels + inputs */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding-top: 200px;
+  padding-bottom: 100px;
+}
+
+.NES_Controller {
+  width: 350px;
+  height: auto;
+  margin-top: 20px;
+}
+
+.title {
+  font-size: 36px;
+  margin: 0;
+  padding: 0;
+}
+
+.buttons {
+  display: flex;
+  gap: 30px;
+}
+
+.start {
+  width: 200px;
+  height: 50px;
   background-color: rgba(63, 51, 78, 0.384);
-  padding: 20px;
-  border-radius: 12px;
-  display: grid;
-  grid-template-columns: 80px 1fr; /* labels fixed width, inputs fill */
-  gap: 12px 20px; /* vertical and horizontal spacing */
   color: white;
-  font-family: 'sans-serif', cursive;
-  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.input {
+  display: flex;
+  justify-content: center;
+}
+
+.inputs {
+  width: 300px;
+  height: 40px;
+  background-color: rgba(63, 51, 78, 0.384);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.inputs-container {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 10px;
+  margin-right: 95px;
+  width: 300px;
+  margin-top: 20px;
 }
 
 .inputs-container label {
-  display: flex;
-  align-items: center;
-  font-weight: 600;
+  align-self: center;
+  color: white;
 }
 
-.inputs-container .inputs {
-  position: static; /* remove fixed */
-  width: 100%; /* full input width */
-  height: 40px;
-  background-color: rgba(63, 51, 78, 0.6);
+.inputs-container input {
+  height: 30px;
+  border-radius: 8px;
   border: none;
-  border-radius: 10px;
-  padding: 8px 12px;
+  padding: 5px;
+  background-color: rgba(63, 51, 78, 0.384);
   color: white;
-  font-size: 16px;
-  outline: none;
-  transition: background-color 0.3s ease;
 }
