@@ -74,3 +74,39 @@ style
   background-color: rgb(34, 34, 46);
   z-index: 1000;
 }
+.inputs-container {
+  position: fixed;
+  top: 65%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 350px; /* a bit wider for labels + inputs */
+  background-color: rgba(63, 51, 78, 0.384);
+  padding: 20px;
+  border-radius: 12px;
+  display: grid;
+  grid-template-columns: 80px 1fr; /* labels fixed width, inputs fill */
+  gap: 12px 20px; /* vertical and horizontal spacing */
+  color: white;
+  font-family: 'sans-serif', cursive;
+  font-size: 16px;
+}
+
+.inputs-container label {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+}
+
+.inputs-container .inputs {
+  position: static; /* remove fixed */
+  width: 100%; /* full input width */
+  height: 40px;
+  background-color: rgba(63, 51, 78, 0.6);
+  border: none;
+  border-radius: 10px;
+  padding: 8px 12px;
+  color: white;
+  font-size: 16px;
+  outline: none;
+  transition: background-color 0.3s ease;
+}
