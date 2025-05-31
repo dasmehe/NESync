@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="src/styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NES</title>
+    <script type="module" src="src/main.js" defer></script>
+  </head>
+
+  <body>
+    <div class="background">
+      <main class="container">
+        <img class="NES_Controller" src="src/assets/NES_Controller.png" alt="NES Console" />
+        <h1 class="title">NES</h1>
+        <div class="buttons">
+          <button onclick="start()" class="start" id="start">Start</button>
+          <button onclick="stop()" class="start" id="stop">Stop</button>
+        </div>
+        <div class="input">
+          <input class="inputs" type="text" id="wait_time" placeholder="latency in seconds" />
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
