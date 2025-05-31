@@ -1,18 +1,31 @@
-# NESync
+# NES Controller API
 
-A bootleg DS4Windows for NES controllers using FastAPI backend and Tauri frontend.
+A FastAPI backend to read NES controller input, map buttons to keyboard keys, and send input events to your system using `pyautogui`. Supports realtime config updates and websocket communication.
+
+---
 
 ## Features
 
-- Real-time NES controller input via HID
-- FastAPI server with WebSocket to broadcast button presses
-- Tauri-powered GUI for easy start/stop and latency control
+- Reads NES controller input via `hid`
+- Maps buttons to custom keyboard keys (configurable)
+- Sends keypress events to OS using `pyautogui`
+- Websocket endpoint to update polling wait time dynamically
+- REST endpoint to update button key mappings (config)
+- Start/stop controller input loop via REST API
+- CORS enabled for frontend integration
 
-## Setup
+---
 
-### Backend
+## Requirements
+
+- Python 3.8+
+- FastAPI
+- uvicorn
+- hidapi (via `hidapi` Python package)
+- pyautogui
+- asyncio
+
+Install dependencies:
 
 ```bash
-cd backend
-pip install -r requirements.txt
-python -m uvicorn main:app --reload
+pip install fastapi uvicorn hidapi pyautogui
