@@ -84,13 +84,19 @@ def parse(data):
         buttons.append("select")
     return buttons
 
-def controller_loop(loop):
+def controller_loop():
     global device, wait_time
+    loop = asyncio.new_event_loop()
+
+    # 🔥 Proper loop startup — no deprecated stuff
+    loop_thread = Thread(target=loop.run_forever, daemon=True)
+    loop_thread.start()
+
     try:
         device = hid.device()
         device.open(vid, pid)
         device.set_nonblocking(True)
-        print("Listening to NES controller...")
+        print("🎮 Listening to NES controller...")
 
         while not stop_event.is_set():
             data = device.read(64)
@@ -98,18 +104,21 @@ def controller_loop(loop):
                 buttons = parse(data)
                 if buttons:
                     handle_input(buttons)
-                    asyncio.run_coroutine_threadsafe(manager.broadcast(str(buttons)), loop)
+                    asyncio.run_coroutine_threadsafe(
+                        manager.broadcast(str(buttons)), loop
+                    )
             with wait_lock:
                 sleep = wait_time
             time.sleep(sleep)
     except Exception as e:
-        print("Controller error:", e)
+        print("❌ Controller error:", e)
     finally:
         if device:
             device.close()
+        loop.call_soon_threadsafe(loop.stop)
 
+# Thread will be started on demand
 thread = None
-loop = asyncio.get_event_loop()
 
 @app.get("/")
 async def root():
@@ -138,7 +147,7 @@ async def start_controller():
     if thread and thread.is_alive():
         return {"status": "already running"}
     stop_event.clear()
-    thread = Thread(target=controller_loop, args=(loop,), daemon=True)
+    thread = Thread(target=controller_loop, daemon=True)
     thread.start()
     return {"status": "started"}
 
@@ -151,5 +160,5 @@ async def stop_controller():
 async def receive_config(data: dict):
     global config
     config.update(data)
-    print("Updated config:", config)
+    print("✅ Updated config:", config)
     return {"status": "success", "data": config}
