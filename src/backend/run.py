@@ -1,4 +1,13 @@
-import uvicorn
+import os
+import subprocess
+import sys
 
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=False)
+print("working path",os.getcwd())
+print("my path", sys.executable)
+
+base_path = os.path.dirname(sys.executable)  # folder where run.exe is
+main_path = os.path.join(base_path, 'other_exe/main.exe')
+nes_path = os.path.join(base_path, 'other_exe/nes.exe')
+
+subprocess.Popen([main_path])
+subprocess.Popen([nes_path])

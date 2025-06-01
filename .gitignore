@@ -1,24 +1,31 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+# Build folders
+/build/
+/dist/
+/out/
+/Output/
+/nes/
 
-node_modules
-dist
-dist-ssr
-*.local
+# Node.js dependencies
+node_modules/
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# IDE files
+.vscode/
+.idea/
+
+# System files
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+Thumbs.db
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+
+# Windows installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Tauri build artifacts
+src-tauri/target/
